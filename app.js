@@ -4,7 +4,7 @@ const axios = require('axios');
 
 
 const app = express();
-const port = 8888
+const port = 3000
 
 
 app.use(express.json())
@@ -12,12 +12,15 @@ app.use(express.urlencoded({'extended' : true}));
 app.use(logger('dev'));
 
 
-app.get('/fileSharing', (req,res) =>{
-    console.log('Success' + req.body);
-    res.send('file: '+ req.body);
+app.post('/fileSharing', (req,res) =>{
+    res.header("Access-Control-Allow-Origin", "http://localhost:8888")
+    console.log('Success fileSharing');
+    res.send({message: "Success"});
 })
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
   })
+  
+
   
