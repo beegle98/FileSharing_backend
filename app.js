@@ -12,10 +12,14 @@ app.use(express.urlencoded({'extended' : true}));
 app.use(logger('dev'));
 
 
-app.post('/fileSharing', (req,res) =>{
+app.post('/file/upload', (req,res) =>{
+
+    
+    console.log('Success to upload');
+    console.log(req.headers);
+    console.log(req.body);
     res.header("Access-Control-Allow-Origin", "http://localhost:8888")
-    console.log('Success fileSharing');
-    res.send({message: "Success"});
+    res.send({message: "Success to upload"});
 })
 
 app.listen(port, () => {
