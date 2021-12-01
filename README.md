@@ -3,7 +3,7 @@
 jupyterLab Extension FileSharing의 백엔드 코드입니다.
 
 jupyterLab_FileSharing 확장기능의 서버를 담당하고
-Node.js기반으로 구현하였습니다.
+Express(Node.js) 기반으로 구현하였습니다.
 
 
 ## 주요 기능
