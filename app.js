@@ -5,7 +5,6 @@ const multer = require('multer');
 const CORS = require('cors');
 const fs = require('fs');
 
-
 const app = express();
 const port = 3000
 
@@ -36,24 +35,14 @@ const storage  = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
   
-
 app.post('/uploadFile', upload.single("File"), (req,res) =>{
-
     console.log('Success to upload File');
-    //console.log(req.headers);
-    //console.log(req.body);
-    console.log("File:");
-    console.log(req.file);
     res.header("Access-Control-Allow-Origin", "http://localhost:8888")
-    res.send({message: "Success to upload File",
-    file: req.file});
+    res.send({message: "Success to upload File", file: req.file});
 })
 app.post('/uploadURL', (req,res) =>{
-
     console.log('Success to upload URL');
-
     console.log(req.body);
-
     res.header("Access-Control-Allow-Origin", "http://localhost:8888")
     res.send({message: "Success to upload URL"});
 })

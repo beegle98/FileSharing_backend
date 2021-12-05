@@ -12,8 +12,7 @@ const extension: JupyterFrontEndPlugin<void> = {
   requires: [IFileBrowserFactory],
   
   activate: (app: JupyterFrontEnd, factory: IFileBrowserFactory) => {
-    app.commands.addCommand('FileSharing/context-menu:open', {
-      
+    app.commands.addCommand('FileSharing/context-menu:open', {          
       label: 'Share file',
       caption: "context menu button for file browser's items.",
       icon: buildIcon,
@@ -22,14 +21,12 @@ const extension: JupyterFrontEndPlugin<void> = {
         console.log("Click the 'share file' button");
         const widget = factory.tracker.currentWidget;
         const file = widget.selectedItems().next();
-        
-        console.log('file: ' + file.path);
-        console.log("Size: " + file.size);
-        
+        const downloadLink = '?_xsrf=2%7C6cc81390%7C5bb85f06295e2c5df9b85c1ac96ce502%7C1635325547';
+
         let input_url : string;
         
         InputDialog.getText({
-          title : 'Please enter the URL',
+          title : 'Please enter the Destination URL',
           
         }).then(result =>{
           if(result.button.accept){
@@ -46,10 +43,25 @@ const extension: JupyterFrontEndPlugin<void> = {
               
             }).then(result => {
               if(result.button.accept){
+
                 console.log( "URL : " + input_url +"\n"+ "Shared the file :" + file.name );
+
+
+                fetch('http://localhost:3000/uploadURL',{
+                  method : 'post',
+                  headers : {'Content-Type' : 'application/json'},                 
+                  body : JSON.stringify({
+                    fileName : file.name,
+                    url : input_url
+                  })
+                }).then(res => res.json())
+                .then(res => console.log(res))
+
+                
                 let uploadFile = new FormData();
+
                 console.log('http://localhost:8888/lab/tree/' + file.path);
-                fetch('http://localhost:8888/files/' + file.path +'?_xsrf=2%7C6cc81390%7C5bb85f06295e2c5df9b85c1ac96ce502%7C1635325547')
+                fetch('http://localhost:8888/files/' + file.path + downloadLink)
                 .then(res => res.blob())
                 .then(function(myblob){
                   console.log("Size: " + myblob.size);
@@ -65,18 +77,7 @@ const extension: JupyterFrontEndPlugin<void> = {
                 .then(res => console.log(res))
                 .catch(e => console.log(e))
                 });
-                
-                
-                /*
-                console.log("file error");
-                uploadFile.append('DestURL',
-                new Blob([JSON.stringify({"url": input_url})], { type: 'application/json' })
-                ,"DestUrl");
-                */
 
-                
-                
-                
               }
             }).catch((e) => console.log(e));
           }
